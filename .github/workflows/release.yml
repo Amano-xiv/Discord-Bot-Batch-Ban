@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   build-windows:
-    # 關鍵：使用 windows 環境才能打包出 .exe
     runs-on: windows-latest
     
     steps:
@@ -30,33 +29,27 @@ jobs:
       - name: 打包成 EXE
         run: pyinstaller --onefile --name "DiscordBanBot" bot.py
 
-        - name: 打包成 EXE
+      - name: 準備發佈資料夾與壓縮
+        shell: pwsh
         run: |
-          pip install pyinstaller discord.py python-dotenv
-          # 打包程式
-          pyinstaller --onefile --name "DiscordBanBot" bot.py
-
-      - name: 準備發佈資料夾
-        run: |
-          # 1. 建立一個要給使用者看到的資料夾名稱
-          mkdir DiscordBanBot_Tool
+          # 1. 建立發佈用的資料夾
+          New-Item -ItemType Directory -Path "DiscordBanBot_Tool"
           
-          # 2. 將產出的 exe 複製進去
-          cp dist/DiscordBanBot.exe DiscordBanBot_Tool/
+          # 2. 複製執行檔
+          Copy-Item "dist/DiscordBanBot.exe" -Destination "DiscordBanBot_Tool/"
           
-          # 3. 將環境變數範例檔複製進去
-          cp .env.example DiscordBanBot_Tool/.env
+          # 3. 複製並改名 .env.example 為 .env
+          if (Test-Path ".env.example") {
+              Copy-Item ".env.example" -Destination "DiscordBanBot_Tool/.env"
+          }
           
-          # 4. 將README打包進去
-          if [ -f "README.md" ]; then cp README.md DiscordBanBot_Tool/; fi
+          # 4. 複製 README
+          if (Test-Path "README.md") {
+              Copy-Item "README.md" -Destination "DiscordBanBot_Tool/"
+          }
           
-          # 5. 將整個資料夾壓縮成一個 zip
-          zip -r DiscordBanBot_v${{ github.ref_name }}.zip DiscordBanBot_Tool/
-
-      - name: 建立壓縮檔 (僅包含必要檔案)
-        # Windows 環境下使用 PowerShell 進行壓縮
-        run: |
-          Compress-Archive -Path "bot.py", "README.md", ".env.example" -DestinationPath "bot_source.zip"
+          # 5. 使用 PowerShell 進行壓縮 (包含資料夾內容)
+          Compress-Archive -Path "DiscordBanBot_Tool" -DestinationPath "DiscordBanBot_v${{ github.ref_name }}.zip"
 
       - name: 建立 GitHub Release 並上傳檔案
         uses: softprops/action-gh-release@v2
@@ -65,8 +58,9 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             ### 📥 使用說明
-            1. 下載並解壓縮 `DiscordBanBot.zip`。
-            2. 使用記事本開啟 `.env`，填入您的 Bot Token。
-            3. 執行 `DiscordBanBot.exe` 即可開始使用。
+            1. 下載並解壓縮 `DiscordBanBot_v${{ github.ref_name }}.zip`。
+            2. 使用記事本開啟資料夾內的 `.env`，填入Bot Token 並儲存。
+            3. 前往 [Discord Developer Portal](https://discord.com/developers/applications) 進行設定。
+            4. 執行 `DiscordBanBot.exe` 即可開始使用。
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
