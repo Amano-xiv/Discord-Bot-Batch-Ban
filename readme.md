@@ -2,6 +2,10 @@
 
 本專案是一個基於 Python `discord.py` 開發的工具，旨在幫助伺服器管理員透過「斜線指令 (Slash Command)」快速封鎖多位違規使用者。本專案採用虛擬環境 (venv) 與環境變數 (.env) 技術，兼顧開發隔離性與密鑰安全性。
 
+## 📥 下載與安裝
+
+您可以從 [Releases 頁面](https://github.com/Amano-xiv/Discord-Bot-Batch-Ban/releases/latest) 下載最新的專案檔。
+
 ## 準備工具
 
 在開始架設前，請確認您的電腦已安裝以下工具：
