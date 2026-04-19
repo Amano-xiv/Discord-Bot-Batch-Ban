@@ -16,7 +16,7 @@
 
 您可以從 [Releases 頁面](https://github.com/Amano-xiv/Discord-Bot-Batch-Ban/releases/latest) 下載最新的專案檔。
 
-## 準備工具 （下載exe可忽略）
+## 準備工具（下載DiscordBanBot.exe可忽略）
 
 在開始架設前，請確認您的電腦已安裝以下工具：
 
@@ -68,7 +68,7 @@
 
 ---
 
-## 第二階段：建立環境與安裝
+## 第二階段：建立環境與安裝（下載DiscordBanBot.exe可忽略）
 
 請在終端機執行以下指令：
 
@@ -100,7 +100,7 @@
 
 ---
 
-## 第三階段：檔案配置
+## 第三階段：檔案配置（下載DiscordBanBot.exe可忽略）
 
 1. .env (金鑰)  
 	```Plaintext
