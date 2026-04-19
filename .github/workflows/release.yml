@@ -52,7 +52,7 @@ jobs:
           }
           
           # 5. 使用 PowerShell 進行壓縮 (包含資料夾內容)
-          Compress-Archive -Path "DiscordBanBot_Tool" -DestinationPath "DiscordBanBot_v${{ github.ref_name }}.zip"
+          Compress-Archive -Path "DiscordBanBot_Tool" -DestinationPath "DiscordBanBot_${{ github.ref_name }}.zip"
 
       - name: 建立 GitHub Release 並上傳檔案
         uses: softprops/action-gh-release@v2
