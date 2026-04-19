@@ -2,11 +2,21 @@
 
 本專案是一個基於 Python `discord.py` 開發的工具，旨在幫助伺服器管理員透過「斜線指令 (Slash Command)」快速封鎖多位違規使用者。本專案採用虛擬環境 (venv) 與環境變數 (.env) 技術，兼顧開發隔離性與密鑰安全性。
 
-## 📥 下載與安裝
+## 快速開始：下載與安裝 (Windows 使用者)
+
+1. 前往 [Releases](https://github.com/Amano-xiv/Discord-Bot-Batch-Ban/releases/latest) 下載最新版本的 DiscordBanBot.exe。
+2. **解壓縮全部檔案**到一個資料夾中（請勿直接在壓縮視窗內執行）。
+3. 找到資料夾內的 `.env` 檔案，按右鍵選擇「記事本」開啟。
+4. 在 `DISCORD_TOKEN=` 後面貼上您的 Token 並儲存。
+5. 執行 `DiscordBanBot.exe`。
+
+## 如果是下載執行黨的可以需略，可以忽略第二、三階段  
+
+## 自行建置（下載DiscordBanBot.exe可忽略）
 
 您可以從 [Releases 頁面](https://github.com/Amano-xiv/Discord-Bot-Batch-Ban/releases/latest) 下載最新的專案檔。
 
-## 準備工具
+## 準備工具 （下載exe可忽略）
 
 在開始架設前，請確認您的電腦已安裝以下工具：
 
@@ -34,6 +44,7 @@
 	![步驟](readme_img/5.png)  
 	先複製起來以避免之後找不到，或是用記事本打開資料夾內的 .env.example 檔案。  
 	貼上到 `DISCORD_TOKEN=` 之後，並且將檔案名稱改名成 .env 忽略副檔名。  
+	如果是使用執行檔，直接貼入 .env 中即可。
 
 4. **開啟特權權限 (Intents)**:
 	![步驟](readme_img/6.png)  

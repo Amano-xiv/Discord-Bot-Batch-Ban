@@ -30,6 +30,29 @@ jobs:
       - name: 打包成 EXE
         run: pyinstaller --onefile --name "DiscordBanBot" bot.py
 
+        - name: 打包成 EXE
+        run: |
+          pip install pyinstaller discord.py python-dotenv
+          # 打包程式
+          pyinstaller --onefile --name "DiscordBanBot" bot.py
+
+      - name: 準備發佈資料夾
+        run: |
+          # 1. 建立一個要給使用者看到的資料夾名稱
+          mkdir DiscordBanBot_Tool
+          
+          # 2. 將產出的 exe 複製進去
+          cp dist/DiscordBanBot.exe DiscordBanBot_Tool/
+          
+          # 3. 將環境變數範例檔複製進去
+          cp .env.example DiscordBanBot_Tool/.env
+          
+          # 4. 將README打包進去
+          if [ -f "README.md" ]; then cp README.md DiscordBanBot_Tool/; fi
+          
+          # 5. 將整個資料夾壓縮成一個 zip
+          zip -r DiscordBanBot_v${{ github.ref_name }}.zip DiscordBanBot_Tool/
+
       - name: 建立壓縮檔 (僅包含必要檔案)
         # Windows 環境下使用 PowerShell 進行壓縮
         run: |
@@ -38,19 +61,12 @@ jobs:
       - name: 建立 GitHub Release 並上傳檔案
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/DiscordBanBot.exe
-            bot_source.zip
-            .env.example
+          files: DiscordBanBot_v${{ github.ref_name }}.zip
           name: Release ${{ github.ref_name }}
           body: |
-            ### 🤖 Discord 批次封鎖機器人自動發佈
-            
-            **下載說明：**
-            1. Windows 使用者請直接下載 `DiscordBanBot.exe`。
-            2. 請確保 `.env` 檔案與執行檔放在同一個資料夾。
-            3. 若被防毒軟體偵測，請手動加入白名單。
-          draft: false
-          prerelease: false
+            ### 📥 使用說明
+            1. 下載並解壓縮 `DiscordBanBot.zip`。
+            2. 使用記事本開啟 `.env`，填入您的 Bot Token。
+            3. 執行 `DiscordBanBot.exe` 即可開始使用。
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
