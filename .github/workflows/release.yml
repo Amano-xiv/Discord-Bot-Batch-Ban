@@ -21,6 +21,21 @@ jobs:
         run: |
           zip -r bot_files.zip . -x "*.git*" "venv/*" ".env"
 
+      - name: 安裝 PyInstaller
+        run: pip install pyinstaller discord.py python-dotenv
+
+      - name: 打包成 EXE
+        run: pyinstaller --onefile --name "DiscordBanBot" bot.py
+
+      - name: 建立發佈版本
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/DiscordBanBot.exe
+            .env.example
+          name: Release ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 建立 GitHub Release
         uses: softprops/action-gh-release@v2
         with:

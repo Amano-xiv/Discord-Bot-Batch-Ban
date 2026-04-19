@@ -3,9 +3,21 @@ from discord import app_commands
 from discord.ext import commands
 import asyncio
 import os
+import sys
 from dotenv import load_dotenv
 
-load_dotenv()
+# 取得執行檔所在的目錄路徑
+if getattr(sys, 'frozen', False):
+    # exe
+    application_path = os.path.dirname(sys.executable)
+else:
+    # .py
+    application_path = os.path.dirname(os.path.abspath(__file__))
+
+# 指定路徑讀取 .env
+env_path = os.path.join(application_path, '.env')
+load_dotenv(env_path)
+
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 class BatchBan(commands.Bot):
