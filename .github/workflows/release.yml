@@ -1,0 +1,33 @@
+name: 建立發佈版本與壓縮檔
+
+on:
+  push:
+    tags:
+      - 'v*' # 當你推送 v1.0, v2.1 等標籤時觸發
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+
+      - name: 建立壓縮檔
+        run: |
+          # 將除了隱藏檔案外的內容打包成 bot_files.zip
+          # 你可以根據需求調整要打包的檔案
+          zip -r bot_files.zip . -x "*.git*" "venv/*" ".env"
+
+      - name: 建立 GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: bot_files.zip
+          name: Release ${{ github.ref_name }}
+          body: |
+            這是自動生成的版本發佈。
+            包含本次版本的所有必要檔案。
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
