@@ -1,46 +1,56 @@
-name: 建立發佈版本與壓縮檔
+name: 建立發佈版本 (包含 EXE)
 
 on:
   push:
     tags:
       - 'v*'
 
-# --- 加入以下這段權限宣告 ---
 permissions:
   contents: write
-# --------------------------
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-windows:
+    # 關鍵：使用 windows 環境才能打包出 .exe
+    runs-on: windows-latest
+    
     steps:
       - name: 檢出程式碼
         uses: actions/checkout@v4
 
-      - name: 建立壓縮檔
-        run: |
-          zip -r bot_files.zip . -x "*.git*" "venv/*" ".env"
+      - name: 設定 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-      - name: 安裝 PyInstaller
-        run: pip install pyinstaller discord.py python-dotenv
+      - name: 安裝依賴套件
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller discord.py python-dotenv
 
       - name: 打包成 EXE
         run: pyinstaller --onefile --name "DiscordBanBot" bot.py
 
-      - name: 建立發佈版本
+      - name: 建立壓縮檔 (僅包含必要檔案)
+        # Windows 環境下使用 PowerShell 進行壓縮
+        run: |
+          Compress-Archive -Path "bot.py", "README.md", ".env.example" -DestinationPath "bot_source.zip"
+
+      - name: 建立 GitHub Release 並上傳檔案
         uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/DiscordBanBot.exe
+            bot_source.zip
             .env.example
           name: Release ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 建立 GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: bot_files.zip
-          name: Release ${{ github.ref_name }}
-          body: "自動產生版本發佈。"
+          body: |
+            ### 🤖 Discord 批次封鎖機器人自動發佈
+            
+            **下載說明：**
+            1. Windows 使用者請直接下載 `DiscordBanBot.exe`。
+            2. 請確保 `.env` 檔案與執行檔放在同一個資料夾。
+            3. 若被防毒軟體偵測，請手動加入白名單。
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
