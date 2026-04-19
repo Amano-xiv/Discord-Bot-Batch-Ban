@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -58,7 +61,7 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             ### 📥 使用說明
-            1. 下載並解壓縮 `DiscordBanBot_v${{ github.ref_name }}.zip`。
+            1. 下載並解壓縮 `DiscordBanBot_${{ github.ref_name }}.zip`。
             2. 使用記事本開啟資料夾內的 `.env`，填入Bot Token 並儲存。
             3. 前往 [Discord Developer Portal](https://discord.com/developers/applications) 進行設定。
             4. 執行 `DiscordBanBot.exe` 即可開始使用。
