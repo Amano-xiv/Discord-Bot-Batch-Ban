@@ -42,12 +42,12 @@ async def on_ready():
 # 定義斜線指令
 @bot.tree.command(name="multiban", description="批次封鎖多個使用者")
 @app_commands.describe(
-    uIds="請輸入 uIds 並用分號分隔 (例如: uId1;uId2;uId3)",
+    ids="請輸入 ids 並用分號分隔 (例如: uId1;uId2;uId3)",
     reason="封鎖原因(選填)"
 )
 @app_commands.checks.has_permissions(ban_members=True)
-async def multiban(interaction: discord.Interaction, uIds: str, reason: str = "批次封鎖"):
-    user_ids = uIds.split(';')
+async def multiban(interaction: discord.Interaction, ids: str, reason: str = "批次封鎖"):
+    user_ids = ids.split(';')
     success_count = 0
     fail_count = 0
     await interaction.response.send_message(f"開始處理 {len(user_ids)} 個帳號的停權流程...原因：{reason} 需等待約 {len(user_ids)} 秒。原因：{reason}", ephemeral=True)
