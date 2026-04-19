@@ -10,7 +10,7 @@
 4. 在 `DISCORD_TOKEN=` 後面貼上您的 Token 並儲存。
 5. 執行 `DiscordBanBot.exe`。
 
-## 如果是下載執行黨的可以需略，可以忽略第二、三階段  
+## 如果是下載執行檔可以忽略自行建置、準備工具、第二、三階段  
 
 ## 自行建置（下載DiscordBanBot.exe可忽略）
 
