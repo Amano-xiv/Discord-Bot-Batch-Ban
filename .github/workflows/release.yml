@@ -30,40 +30,40 @@ jobs:
           pip install pyinstaller discord.py python-dotenv
 
       - name: 部署執行檔
-        run: pyinstaller --onefile --name "DiscordBanBot" bot.py
+        run: pyinstaller --onefile --name "DiscordBatchBanBot" bot.py
 
       - name: 準備發佈資料夾與壓縮
         shell: pwsh
         run: |
           # 1. 建立發佈用的資料夾
-          New-Item -ItemType Directory -Path "DiscordBanBot_Tool"
+          New-Item -ItemType Directory -Path "DiscordBot_Tool"
           
           # 2. 複製執行檔
-          Copy-Item "dist/DiscordBanBot.exe" -Destination "DiscordBanBot_Tool/"
+          Copy-Item "dist/DiscordBatchBanBot.exe" -Destination "DiscordBot_Tool/"
           
           # 3. 複製並改名 .env.example 為 .env
           if (Test-Path ".env.example") {
-              Copy-Item ".env.example" -Destination "DiscordBanBot_Tool/.env"
+              Copy-Item ".env.example" -Destination "DiscordBot_Tool/.env"
           }
           
           # 4. 複製 README
           if (Test-Path "README.md") {
-              Copy-Item "README.md" -Destination "DiscordBanBot_Tool/"
+              Copy-Item "README.md" -Destination "DiscordBot_Tool/"
           }
           
           # 5. 使用 PowerShell 進行壓縮 (包含資料夾內容)
-          Compress-Archive -Path "DiscordBanBot_Tool" -DestinationPath "DiscordBanBot_${{ github.ref_name }}.zip"
+          Compress-Archive -Path "DiscordBot_Tool" -DestinationPath "DiscordBatchBanBot_${{ github.ref_name }}.zip"
 
       - name: 建立 GitHub Release 並上傳檔案
         uses: softprops/action-gh-release@v2
         with:
-          files: DiscordBanBot_${{ github.ref_name }}.zip
+          files: DiscordBatchBanBot_${{ github.ref_name }}.zip
           name: Release ${{ github.ref_name }}
           body: |
             ### 📥 使用說明
-            1. 下載並解壓縮 `DiscordBanBot_${{ github.ref_name }}.zip`。
+            1. 下載並解壓縮 `DiscordBatchBanBot_${{ github.ref_name }}.zip`。
             2. 前往 [Discord Developer Portal](https://discord.com/developers/applications) 進行設定。
             3. 使用記事本開啟資料夾內的 `.env`，填入Bot Token 並儲存（[參照第一階段步驟](https://github.com/Amano-xiv/Discord-Bot-Batch-Ban#%E7%AC%AC%E4%B8%80%E9%9A%8E%E6%AE%B5discord-%E9%96%8B%E7%99%BC%E8%80%85%E5%BE%8C%E5%8F%B0%E8%A8%AD%E5%AE%9A)）。
-            4. 執行 `DiscordBanBot.exe` 即可開始使用。
+            4. 執行 `DiscordBatchBanBot.exe` 即可開始使用。
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
