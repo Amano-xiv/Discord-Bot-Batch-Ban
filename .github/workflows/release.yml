@@ -57,7 +57,7 @@ jobs:
       - name: 建立 GitHub Release 並上傳檔案
         uses: softprops/action-gh-release@v2
         with:
-          files: DiscordBanBot_v${{ github.ref_name }}.zip
+          files: DiscordBanBot_${{ github.ref_name }}.zip
           name: Release ${{ github.ref_name }}
           body: |
             ### 📥 使用說明
